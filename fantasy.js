@@ -125,7 +125,7 @@ const addPlayerToTable = (player) => {
         playersTableBody.appendChild(row);
     }
     catch (error) {
-        console.log("Error adding player to table:", error);
+        console.error("Error adding player to table:", error);
     }
 };
 const createActionCell = (player) => {
@@ -152,7 +152,7 @@ const addPlayerToTeam = (player) => {
         }
     }
     catch (error) {
-        console.log("Error adding player to team:", error);
+        console.error("Error adding player to team:", error);
     }
 };
 const updateTeamDisplay = () => {

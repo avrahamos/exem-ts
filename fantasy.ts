@@ -160,7 +160,7 @@ const addPlayerToTable = (player: PlayerBack): void => {
 
     playersTableBody.appendChild(row);
   } catch (error) {
-    console.log("Error adding player to table:", error);
+    console.error("Error adding player to table:", error);
   }
 };
 
@@ -195,7 +195,7 @@ const addPlayerToTeam = (player: PlayerBack): void => {
       updateTeamDisplay();
     }
   } catch (error) {
-    console.log("Error adding player to team:", error);
+    console.error("Error adding player to team:", error);
   }
 };
 
