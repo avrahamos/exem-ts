@@ -68,13 +68,13 @@ h1 {
 }
 
 .searchBox button {
-  background-color: #ffa500;
+  background-color: #3a79d7;
   color: #000;
   cursor: pointer;
 }
 
 .searchBox button:hover {
-  background-color: #ff4500;
+  background-color: #e18563;
 }
 
 #playersTable {
@@ -98,7 +98,7 @@ h1 {
 }
 
 #playersTable td button {
-  background-color: #ffa500;
+  background-color: #2d4990;
   color: black;
   padding: 5px;
   border: 1px solid #000;
@@ -107,5 +107,5 @@ h1 {
 }
 
 #playersTable td button:hover {
-  background-color: #ff4500;
+  background-color: #6c73ff;
 }

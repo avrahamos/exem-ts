@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>NBA Fantasy Team</title>
     <script src="fantasy.js" defer></script>
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -14,61 +14,74 @@
 
     <h1>My Fantasy Team</h1>
 
+    <!-- אזור התצוגה של הקבוצה הנוכחית -->
     <div class="myTeam">
       <div class="playerCard" id="PG">
         <h3>Point Guard</h3>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+        <p>Name:</p>
+        <p>Points:</p>
+        <p>FG%:</p>
+        <p>3P%:</p>
       </div>
       <div class="playerCard" id="SG">
         <h3>Shooting Guard</h3>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+        <p>Name:</p>
+        <p>Points:</p>
+        <p>FG%:</p>
+        <p>3P%:</p>
       </div>
       <div class="playerCard" id="SF">
         <h3>Small Forward</h3>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+        <p>Name:</p>
+        <p>Points:</p>
+        <p>FG%:</p>
+        <p>3P%:</p>
       </div>
-      <div class="playerCard" id="PG">
+      <div class="playerCard" id="PF">
         <h3>Power Forward</h3>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+        <p>Name:</p>
+        <p>Points:</p>
+        <p>FG%:</p>
+        <p>3P%:</p>
       </div>
       <div class="playerCard" id="C">
         <h3>Center</h3>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+        <p>Name:</p>
+        <p>Points:</p>
+        <p>FG%:</p>
+        <p>3P%:</p>
       </div>
     </div>
 
     <h1>NBA Player Search</h1>
-    <form action="">
+
+    <!-- אזור החיפוש של שחקנים -->
+    <form>
       <div class="searchBox">
+        <label for="position">Select a player position:</label>
         <select name="position" id="position">
           <option value="" selected disabled>Select a player position</option>
-          <option value="PG">PG</option>
-          <option value="SG">SG</option>
-          <option value="SF">SF</option>
-          <option value="PF">PF</option>
-          <option value="C">C</option>
+          <option value="PG">Point Guard (PG)</option>
+          <option value="SG">Shooting Guard (SG)</option>
+          <option value="SF">Small Forward (SF)</option>
+          <option value="PF">Power Forward (PF)</option>
+          <option value="C">Center (C)</option>
         </select>
+
+        <label for="pointsRange">Points</label>
         <input type="range" max="20000" id="pointsRange" />
+
+        <label for="fgRange">FG%</label>
         <input type="range" max="100" id="fgRange" />
+
+        <label for="threePointRange">3P%</label>
         <input type="range" max="100" id="threePointRange" />
+
         <button class="searchBtn">Search Player</button>
       </div>
     </form>
+
+    <!-- טבלה להצגת השחקנים שנמצאו -->
     <table id="playersTable">
       <thead>
         <tr>

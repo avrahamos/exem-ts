@@ -22,6 +22,27 @@ const threePointValue = document.createElement("span");
 pointsRange.after(pointsValue);
 fgRange.after(fgValue);
 threePointRange.after(threePointValue);
+const playerNamePG = document.querySelector("#PG p:nth-child(2)");
+const pointsPG = document.querySelector("#PG p:nth-child(3)");
+const fgPG = document.querySelector("#PG p:nth-child(4)");
+const threePointPG = document.querySelector("#PG p:nth-child(5)");
+const playerNameSG = document.querySelector("#SG p:nth-child(2)");
+const pointsSG = document.querySelector("#SG p:nth-child(3)");
+const fgSG = document.querySelector("#SG p:nth-child(4)");
+const threePointSG = document.querySelector("#SG p:nth-child(5)");
+const playerNameSF = document.querySelector("#SF p:nth-child(2)");
+const pointsSF = document.querySelector("#SF p:nth-child(3)");
+const fgSF = document.querySelector("#SF p:nth-child(4)");
+const threePointSF = document.querySelector("#SF p:nth-child(5)");
+const playerNamePF = document.querySelector("#PF p:nth-child(2)");
+const pointsPF = document.querySelector("#PF p:nth-child(3)");
+const fgPF = document.querySelector("#PF p:nth-child(4)");
+const threePointPF = document.querySelector("#PF p:nth-child(5)");
+const playerNameC = document.querySelector("#C p:nth-child(2)");
+const pointsC = document.querySelector("#C p:nth-child(3)");
+const fgC = document.querySelector("#C p:nth-child(4)");
+const threePointC = document.querySelector("#C p:nth-child(5)");
+let team = {};
 function updateRangeValues() {
     pointsValue.textContent = ` ${pointsRange.value} points`;
     fgValue.textContent = ` ${fgRange.value}% FG`;
@@ -30,17 +51,7 @@ function updateRangeValues() {
 pointsRange.addEventListener("input", updateRangeValues);
 fgRange.addEventListener("input", updateRangeValues);
 threePointRange.addEventListener("input", updateRangeValues);
-const searchPlayer = () => __awaiter(void 0, void 0, void 0, function* () {
-    const position = positionSelect.value;
-    const points = pointsRange.value;
-    const twoPercent = fgRange.value;
-    const threePercent = threePointRange.value;
-    const searchParams = {
-        position: position,
-        twoPercent: parseInt(twoPercent),
-        threePercent: parseInt(threePercent),
-        points: parseInt(points),
-    };
+const fetchPlayersFromAPI = (searchParams) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield fetch(baseUrl, {
             method: "POST",
@@ -52,32 +63,59 @@ const searchPlayer = () => __awaiter(void 0, void 0, void 0, function* () {
         if (!response.ok) {
             throw new Error("Failed to fetch players.");
         }
-        const players = yield response.json();
+        return response.json();
+    }
+    catch (error) {
+        console.error("Error in fetchPlayersFromAPI:", error);
+        return [];
+    }
+});
+const getSearchParams = () => {
+    return {
+        position: positionSelect.value,
+        twoPercent: parseInt(fgRange.value),
+        threePercent: parseInt(threePointRange.value),
+        points: parseInt(pointsRange.value),
+    };
+};
+const searchPlayers = () => __awaiter(void 0, void 0, void 0, function* () {
+    const searchParams = getSearchParams();
+    try {
+        const players = yield fetchPlayersFromAPI(searchParams);
         displayPlayers(players);
     }
     catch (error) {
-        console.log(error);
+        console.error("Error fetching players:", error);
     }
 });
 const displayPlayers = (players) => {
-    playersTableBody.textContent = "";
+    clearTable(playersTableBody);
     for (const player of players) {
+        try {
+            addPlayerToTable(player);
+        }
+        catch (error) {
+            console.error("Error adding player to table:", error);
+        }
+    }
+};
+const clearTable = (tableBody) => {
+    tableBody.textContent = "";
+};
+const createTableCell = (text) => {
+    const cell = document.createElement("td");
+    cell.textContent = text;
+    return cell;
+};
+const addPlayerToTable = (player) => {
+    try {
         const row = document.createElement("tr");
-        const playerNameTd = document.createElement("td");
-        playerNameTd.textContent = player.playerName;
-        const positionTd = document.createElement("td");
-        positionTd.textContent = player.position;
-        const pointsTd = document.createElement("td");
-        pointsTd.textContent = player.points.toString();
-        const twoPercentTd = document.createElement("td");
-        twoPercentTd.textContent = `${player.twoPercent}%`;
-        const threePercentTd = document.createElement("td");
-        threePercentTd.textContent = `${player.threePercent}%`;
-        const actionTd = document.createElement("td");
-        const addButton = document.createElement("button");
-        addButton.textContent = `Add ${player.playerName} to Current Team`;
-        addButton.onclick = () => addPlayerToTeam(player.playerName, player.position, player.points, player.twoPercent, player.threePercent);
-        actionTd.appendChild(addButton);
+        const playerNameTd = createTableCell(player.playerName);
+        const positionTd = createTableCell(player.position);
+        const pointsTd = createTableCell(player.points.toString());
+        const twoPercentTd = createTableCell(`${player.twoPercent}%`);
+        const threePercentTd = createTableCell(`${player.threePercent}%`);
+        const actionTd = createActionCell(player);
         row.appendChild(playerNameTd);
         row.appendChild(positionTd);
         row.appendChild(pointsTd);
@@ -86,39 +124,96 @@ const displayPlayers = (players) => {
         row.appendChild(actionTd);
         playersTableBody.appendChild(row);
     }
-};
-const addPlayerToTeam = (playerName, position, points, twoPercent, threePercent) => {
-    const team = JSON.parse(localStorage.getItem("fantasyTeam") || "[]");
-    if (team[position]) {
-        const confirmSwitch = confirm(`You already have a ${position}. Do you want to replace ${team[position].playerName} with ${playerName}?`);
-        if (!confirmSwitch) {
-            return;
-        }
+    catch (error) {
+        console.log("Error adding player to table:", error);
     }
-    team[position] = { playerName, points, twoPercent, threePercent };
-    localStorage.setItem("fantasyTeam", JSON.stringify(team));
-    updateTeamDisplay();
 };
-const updateTeamDisplay = () => {
-    const team = JSON.parse(localStorage.getItem("fantasyTeam") || "[]");
-    for (const card of playerCards) {
-        const position = card.id;
-        const playerInfo = team[position];
-        if (playerInfo) {
-            card.querySelector("p:nth-child(2)").textContent = playerInfo.playerName;
-            card.querySelector("p:nth-child(3)").textContent = `Points: ${playerInfo.points}`;
-            card.querySelector("p:nth-child(4)").textContent = `Two Percent: ${playerInfo.twoPercent}%`;
-            card.querySelector("p:nth-child(5)").textContent = `Three Percent: ${playerInfo.threePercent}%`;
+const createActionCell = (player) => {
+    const cell = document.createElement("td");
+    const addButton = document.createElement("button");
+    addButton.textContent = `Add ${getFirstName(player.playerName)} to Current Team`;
+    addButton.addEventListener("click", () => addPlayerToTeam(player));
+    cell.appendChild(addButton);
+    return cell;
+};
+const addPlayerToTeam = (player) => {
+    try {
+        const existingPlayer = team[player.position];
+        if (existingPlayer) {
+            const confirmSwitch = confirm(`You already have a ${player.position}. Do you want to replace ${existingPlayer.playerName} with ${player.playerName}?`);
+            if (confirmSwitch) {
+                team[player.position] = player;
+                updateTeamDisplay();
+            }
         }
         else {
-            card.querySelector("p:nth-child(2)").textContent = "";
-            card.querySelector("p:nth-child(3)").textContent = "";
-            card.querySelector("p:nth-child(4)").textContent = "";
-            card.querySelector("p:nth-child(5)").textContent = "";
+            team[player.position] = player;
+            updateTeamDisplay();
         }
+    }
+    catch (error) {
+        console.log("Error adding player to team:", error);
+    }
+};
+const updateTeamDisplay = () => {
+    try {
+        for (const card of playerCards) {
+            const position = card.id;
+            const playerInfo = team[position];
+            if (playerInfo) {
+                updatePlayerCard(card, playerInfo);
+            }
+        }
+    }
+    catch (error) {
+        console.error("Error updating team display:", error);
+    }
+};
+const updatePlayerCard = (card, playerInfo) => {
+    try {
+        switch (card.id) {
+            case "PG":
+                playerNamePG.textContent = `Name: ${playerInfo.playerName}`;
+                pointsPG.textContent = `Points: ${playerInfo.points}`;
+                fgPG.textContent = `FG%: ${playerInfo.twoPercent}%`;
+                threePointPG.textContent = `3P%: ${playerInfo.threePercent}%`;
+                break;
+            case "SG":
+                playerNameSG.textContent = `Name: ${playerInfo.playerName}`;
+                pointsSG.textContent = `Points: ${playerInfo.points}`;
+                fgSG.textContent = `FG%: ${playerInfo.twoPercent}%`;
+                threePointSG.textContent = `3P%: ${playerInfo.threePercent}%`;
+                break;
+            case "SF":
+                playerNameSF.textContent = `Name: ${playerInfo.playerName}`;
+                pointsSF.textContent = `Points: ${playerInfo.points}`;
+                fgSF.textContent = `FG%: ${playerInfo.twoPercent}%`;
+                threePointSF.textContent = `3P%: ${playerInfo.threePercent}%`;
+                break;
+            case "PF":
+                playerNamePF.textContent = `Name: ${playerInfo.playerName}`;
+                pointsPF.textContent = `Points: ${playerInfo.points}`;
+                fgPF.textContent = `FG%: ${playerInfo.twoPercent}%`;
+                threePointPF.textContent = `3P%: ${playerInfo.threePercent}%`;
+                break;
+            case "C":
+                playerNameC.textContent = `Name: ${playerInfo.playerName}`;
+                pointsC.textContent = `Points: ${playerInfo.points}`;
+                fgC.textContent = `FG%: ${playerInfo.twoPercent}%`;
+                threePointC.textContent = `3P%: ${playerInfo.threePercent}%`;
+                break;
+            default:
+                console.error(`Unknown position: ${card.id}`);
+        }
+    }
+    catch (error) {
+        console.error("Error updating player card:", error);
     }
 };
 searchBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    searchPlayer();
+    searchPlayers();
 });
+const getFirstName = (fullName) => {
+    return fullName.split(" ")[0];
+};
