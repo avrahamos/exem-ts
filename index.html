@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="fantasy.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="openingLine">
+      <h2>NBA FANTASY 2014-2024</h2>
+    </div>
+
+    <h1>My Fantasy Team</h1>
+
+    <div class="myTeam">
+      <div class="playerCard" id="PG">
+        <h3>Point Guard</h3>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+      </div>
+      <div class="playerCard" id="SG">
+        <h3>Shooting Guard</h3>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+      </div>
+      <div class="playerCard" id="SF">
+        <h3>Small Forward</h3>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+      </div>
+      <div class="playerCard" id="PG">
+        <h3>Power Forward</h3>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+      </div>
+      <div class="playerCard" id="C">
+        <h3>Center</h3>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+      </div>
+    </div>
+
+    <h1>NBA Player Search</h1>
+    <form action="">
+      <div class="searchBox">
+        <select name="position" id="position">
+          <option value="" selected disabled>Select a player position</option>
+          <option value="PG">PG</option>
+          <option value="SG">SG</option>
+          <option value="SF">SF</option>
+          <option value="PF">PF</option>
+          <option value="C">C</option>
+        </select>
+        <input type="range" max="20000" id="pointsRange" />
+        <input type="range" max="100" id="fgRange" />
+        <input type="range" max="100" id="threePointRange" />
+        <button class="searchBtn">Search Player</button>
+      </div>
+    </form>
+    <table id="playersTable">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Position</th>
+          <th>Points</th>
+          <th>FG%</th>
+          <th>3P%</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </body>
+</html>
